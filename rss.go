@@ -183,6 +183,7 @@ type Item struct {
 	ID         string       `json:"id"`
 	Enclosures []*Enclosure `json:"enclosures"`
 	Read       bool         `json:"read"`
+	Image string `json:"image"`
 }
 
 func (i *Item) String() string {
