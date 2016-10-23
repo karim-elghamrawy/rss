@@ -86,6 +86,7 @@ func parseRSS1(data []byte, read *db) (*Feed, error) {
 		next := new(Item)
 		next.Title = item.Title
 		next.Summary = getSummaryRss1(item)
+		next.Origin = out.Title
 		/* We are guaranteed to have an image this way to fall back to */
 		if next.Image = getImageRss1(item); next.Image == "" {
 			next.Image = out.Image.Url
