@@ -38,6 +38,7 @@ func getImageRss1(item rss1_0Item) string {
 }
 
 func getSummaryRss1(item rss1_0Item) string {
+	var fbDesc, twDesc, socDesc, rssDesc string
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
 		log.Warnf("can not parse url %v", item.Link)
@@ -46,22 +47,31 @@ func getSummaryRss1(item rss1_0Item) string {
 	selection := doc.Find(`meta[property="og:description"]`)
 	if selection != nil {
 		if desc, found := selection.Attr("content"); found {
-			return desc
+			fbDesc = desc
 		}
 	}
 
 	selection = doc.Find(`meta[property="twitter:description"]`)
 	if selection != nil {
 		if desc, found := selection.Attr("content"); found {
-			return desc
+			twDesc = desc
 		}
 	}
 
 	if !strings.ContainsAny(item.Description, "&lt;&gt;") {
-		return item.Description
+		rssDesc = item.Description
 	}
 
-	return ""
+	if len(fbDesc) >= len(twDesc) {
+		socDesc = fbDesc
+	} else {
+		socDesc = twDesc
+	}
+
+	if len(socDesc) >= len(rssDesc) {
+		return socDesc
+	}
+	return rssDesc
 }
 
 func getImageRss2(item rss2_0Item) string {
@@ -94,6 +104,7 @@ func getImageRss2(item rss2_0Item) string {
 }
 
 func getSummaryRss2(item rss2_0Item) string {
+	var fbDesc, twDesc, socDesc, rssDesc string
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
 		log.Warnf("can not parse url %v", item.Link)
@@ -102,19 +113,29 @@ func getSummaryRss2(item rss2_0Item) string {
 	selection := doc.Find(`meta[property="og:description"]`)
 	if selection != nil {
 		if desc, found := selection.Attr("content"); found {
-			return desc
+			fbDesc = desc
 		}
 	}
 
 	selection = doc.Find(`meta[property="twitter:description"]`)
 	if selection != nil {
 		if desc, found := selection.Attr("content"); found {
-			return desc
+			twDesc = desc
 		}
 	}
+
 	if !strings.ContainsAny(item.Description, "&lt;&gt;") {
-		return item.Description
+		rssDesc = item.Description
 	}
 
-	return ""
+	if len(fbDesc) >= len(twDesc) {
+		socDesc = fbDesc
+	} else {
+		socDesc = twDesc
+	}
+
+	if len(socDesc) >= len(rssDesc) {
+		return socDesc
+	}
+	return rssDesc
 }
