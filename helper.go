@@ -69,7 +69,6 @@ func getImageRss2(item rss2_0Item) string {
 			return enc.Url
 		}
 	}
-	log.Infof("url is %v")
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
 		log.Warnf("can not parse url %v", item.Link)
