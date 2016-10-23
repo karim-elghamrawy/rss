@@ -38,9 +38,6 @@ func getImageRss1(item rss1_0Item) string {
 }
 
 func getSummaryRss1(item rss1_0Item) string {
-	if !strings.ContainsAny(item.Description, "&lt;&gt;") {
-		return item.Description
-	}
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
 		log.Warnf("can not parse url %v", item.Link)
@@ -58,6 +55,10 @@ func getSummaryRss1(item rss1_0Item) string {
 		if desc, found := selection.Attr("content"); found {
 			return desc
 		}
+	}
+
+	if !strings.ContainsAny(item.Description, "&lt;&gt;") {
+		return item.Description
 	}
 
 	return ""
@@ -93,9 +94,6 @@ func getImageRss2(item rss2_0Item) string {
 }
 
 func getSummaryRss2(item rss2_0Item) string {
-	if !strings.ContainsAny(item.Description, "&lt;&gt;") {
-		return item.Description
-	}
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
 		log.Warnf("can not parse url %v", item.Link)
@@ -113,6 +111,9 @@ func getSummaryRss2(item rss2_0Item) string {
 		if desc, found := selection.Attr("content"); found {
 			return desc
 		}
+	}
+	if !strings.ContainsAny(item.Description, "&lt;&gt;") {
+		return item.Description
 	}
 
 	return ""
