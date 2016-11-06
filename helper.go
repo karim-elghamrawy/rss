@@ -86,6 +86,8 @@ func getSummaryRss1(item rss1_0Item) string {
 
 	if len(descSlice) > MaxDescriptionWords {
 		desc = strings.Join(descSlice[:MaxDescriptionWords], " ")
+	}
+	if desc != "" {
 		desc = fmt.Sprintf("%s...", desc)
 	}
 	return desc
@@ -202,6 +204,8 @@ func getSummaryRss2(item rss2_0Item) string {
 
 	if len(descSlice) > MaxDescriptionWords {
 		desc = strings.Join(descSlice[:MaxDescriptionWords], " ")
+	}
+	if desc != "" {
 		desc = fmt.Sprintf("%s...", desc)
 	}
 	return desc
