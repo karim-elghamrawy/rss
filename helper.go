@@ -1,6 +1,7 @@
 package rss
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -9,7 +10,7 @@ import (
 
 const (
 	// MaxDescriptionWords is the maximum number of words in a description
-	MaxDescriptionWords = 25
+	MaxDescriptionWords = 50
 )
 
 func getImageRss1(item rss1_0Item) string {
@@ -85,6 +86,7 @@ func getSummaryRss1(item rss1_0Item) string {
 
 	if len(descSlice) > MaxDescriptionWords {
 		desc = strings.Join(descSlice[:MaxDescriptionWords], " ")
+		desc = fmt.Sprintf("%s...", desc)
 	}
 	return desc
 }
@@ -200,6 +202,7 @@ func getSummaryRss2(item rss2_0Item) string {
 
 	if len(descSlice) > MaxDescriptionWords {
 		desc = strings.Join(descSlice[:MaxDescriptionWords], " ")
+		desc = fmt.Sprintf("%s...", desc)
 	}
 	return desc
 }
