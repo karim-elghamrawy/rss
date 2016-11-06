@@ -81,9 +81,10 @@ func getSummaryRss1(item rss1_0Item) string {
 		desc = rssDesc
 	}
 
-	if len(desc) > MaxDescriptionWords {
-		descSlice := strings.Split(desc, " ")[:MaxDescriptionWords]
-		desc = strings.Join(descSlice, " ")
+	descSlice := strings.Split(desc, " ")
+
+	if len(descSlice) > MaxDescriptionWords {
+		desc = strings.Join(descSlice[:MaxDescriptionWords], " ")
 	}
 	return desc
 }
@@ -195,9 +196,10 @@ func getSummaryRss2(item rss2_0Item) string {
 		desc = rssDesc
 	}
 
-	if len(desc) > MaxDescriptionWords {
-		descSlice := strings.Split(desc, " ")[:MaxDescriptionWords]
-		desc = strings.Join(descSlice, " ")
+	descSlice := strings.Split(desc, " ")
+
+	if len(descSlice) > MaxDescriptionWords {
+		desc = strings.Join(descSlice[:MaxDescriptionWords], " ")
 	}
 	return desc
 }
