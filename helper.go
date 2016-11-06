@@ -7,6 +7,11 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
+const (
+	// MaxDescriptionWords is the maximum number of words in a description
+	MaxDescriptionWords = 25
+)
+
 func getImageRss1(item rss1_0Item) string {
 	for _, enc := range item.Enclosures {
 		if strings.Contains(enc.Type, "image") {
@@ -68,10 +73,58 @@ func getSummaryRss1(item rss1_0Item) string {
 		socDesc = twDesc
 	}
 
+	var desc string
+
 	if len(socDesc) >= len(rssDesc) {
-		return socDesc
+		desc = socDesc
+	} else {
+		desc = rssDesc
 	}
-	return rssDesc
+
+	if len(desc) > MaxDescriptionWords {
+		descSlice := strings.Split(desc, " ")[:MaxDescriptionWords]
+		desc = strings.Join(descSlice, " ")
+	}
+	return desc
+}
+
+func getTitleRss1(item rss1_0Item) string {
+	var fbTitle, twTitle, socTitle, rssTitle string
+	doc, err := goquery.NewDocument(item.Link)
+	if err != nil {
+		log.Warnf("can not parse url %v", item.Link)
+		return ""
+	}
+	selection := doc.Find(`meta[property="og:title"]`)
+	if selection != nil {
+		if t, found := selection.Attr("content"); found {
+			fbTitle = t
+		}
+	}
+
+	selection = doc.Find(`meta[property="twitter:title"]`)
+	if selection != nil {
+		if t, found := selection.Attr("content"); found {
+			twTitle = t
+		}
+	}
+
+	rssTitle = item.Title
+
+	if len(fbTitle) >= len(twTitle) {
+		socTitle = fbTitle
+	} else {
+		socTitle = twTitle
+	}
+
+	var title string
+
+	if len(socTitle) >= len(rssTitle) {
+		title = socTitle
+	} else {
+		title = rssTitle
+	}
+	return title
 }
 
 func getImageRss2(item rss2_0Item) string {
@@ -134,8 +187,56 @@ func getSummaryRss2(item rss2_0Item) string {
 		socDesc = twDesc
 	}
 
+	var desc string
+
 	if len(socDesc) >= len(rssDesc) {
-		return socDesc
+		desc = socDesc
+	} else {
+		desc = rssDesc
 	}
-	return rssDesc
+
+	if len(desc) > MaxDescriptionWords {
+		descSlice := strings.Split(desc, " ")[:MaxDescriptionWords]
+		desc = strings.Join(descSlice, " ")
+	}
+	return desc
+}
+
+func getTitleRss2(item rss2_0Item) string {
+	var fbTitle, twTitle, socTitle, rssTitle string
+	doc, err := goquery.NewDocument(item.Link)
+	if err != nil {
+		log.Warnf("can not parse url %v", item.Link)
+		return ""
+	}
+	selection := doc.Find(`meta[property="og:title"]`)
+	if selection != nil {
+		if t, found := selection.Attr("content"); found {
+			fbTitle = t
+		}
+	}
+
+	selection = doc.Find(`meta[property="twitter:title"]`)
+	if selection != nil {
+		if t, found := selection.Attr("content"); found {
+			twTitle = t
+		}
+	}
+
+	rssTitle = item.Title
+
+	if len(fbTitle) >= len(twTitle) {
+		socTitle = fbTitle
+	} else {
+		socTitle = twTitle
+	}
+
+	var title string
+
+	if len(socTitle) >= len(rssTitle) {
+		title = socTitle
+	} else {
+		title = rssTitle
+	}
+	return title
 }
