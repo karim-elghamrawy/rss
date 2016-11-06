@@ -98,11 +98,17 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 		next.Link = item.Link
 		if item.Date != "" {
 			next.Date, err = parseTime(item.Date)
+			if time.Now().Before(next.Date) {
+				next.Date = time.Now()
+			}
 			if err != nil {
 				return nil, err
 			}
 		} else if item.PubDate != "" {
 			next.Date, err = parseTime(item.PubDate)
+			if time.Now().Before(next.Date) {
+				next.Date = time.Now()
+			}
 			if err != nil {
 				return nil, err
 			}
