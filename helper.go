@@ -22,7 +22,7 @@ func getImageRss1(item rss1_0Item) string {
 
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
-		log.Warnf("can not parse url %v", item.Link)
+		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
 		return ""
 	}
 
@@ -47,8 +47,8 @@ func getSummaryRss1(item rss1_0Item) string {
 	var fbDesc, twDesc, socDesc, rssDesc string
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
-		log.Warnf("can not parse url %v", item.Link)
-		return ""
+		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
+		return item.Description
 	}
 	selection := doc.Find(`meta[property="og:description"]`)
 	if selection != nil {
@@ -97,8 +97,8 @@ func getTitleRss1(item rss1_0Item) string {
 	var fbTitle, twTitle, socTitle, rssTitle string
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
-		log.Warnf("can not parse url %v", item.Link)
-		return ""
+		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
+		return item.Title
 	}
 	selection := doc.Find(`meta[property="og:title"]`)
 	if selection != nil {
@@ -140,7 +140,7 @@ func getImageRss2(item rss2_0Item) string {
 	}
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
-		log.Warnf("can not parse url %v", item.Link)
+		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
 		return ""
 	}
 
@@ -165,8 +165,8 @@ func getSummaryRss2(item rss2_0Item) string {
 	var fbDesc, twDesc, socDesc, rssDesc string
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
-		log.Warnf("can not parse url %v", item.Link)
-		return ""
+		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
+		return item.Description
 	}
 	selection := doc.Find(`meta[property="og:description"]`)
 	if selection != nil {
@@ -215,8 +215,8 @@ func getTitleRss2(item rss2_0Item) string {
 	var fbTitle, twTitle, socTitle, rssTitle string
 	doc, err := goquery.NewDocument(item.Link)
 	if err != nil {
-		log.Warnf("can not parse url %v", item.Link)
-		return ""
+		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
+		return item.Title
 	}
 	selection := doc.Find(`meta[property="og:title"]`)
 	if selection != nil {
