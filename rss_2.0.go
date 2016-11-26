@@ -89,11 +89,12 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 		}
 
 		next := new(Item)
-		next.Title = getTitleRss2(item)
-		next.Summary = getSummaryRss2(item)
+		doc := scrapeURL(item.Link)
+		next.Title = getTitleRss2(item, doc)
+		next.Summary = getSummaryRss2(item, doc)
 		next.Origin = out.Title
 
-		next.Image = getImageRss2(item)
+		next.Image = getImageRss2(item, doc)
 		next.Content = item.Content
 		next.Link = item.Link
 		if item.Date != "" {

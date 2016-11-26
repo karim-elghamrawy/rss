@@ -13,54 +13,56 @@ const (
 	MaxDescriptionWords = 50
 )
 
-func getImageRss1(item rss1_0Item) string {
+func scrapeURL(url string) *goquery.Document {
+	doc, err := goquery.NewDocument(url)
+	if err != nil {
+		log.Warnf("can not parse (url %v, error: %v)", url, err.Error())
+		return nil
+	}
+	return doc
+}
+
+func getImageRss1(item rss1_0Item, doc *goquery.Document) string {
 	for _, enc := range item.Enclosures {
 		if strings.Contains(enc.Type, "image") {
 			return enc.Url
 		}
 	}
 
-	doc, err := goquery.NewDocument(item.Link)
-	if err != nil {
-		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
-		return ""
-	}
-
-	selection := doc.Find(`meta[property="og:image"]`)
-	if selection != nil {
-		if imgURL, found := selection.Attr("content"); found {
-			return imgURL
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:image"]`)
+		if selection != nil {
+			if imgURL, found := selection.Attr("content"); found {
+				return imgURL
+			}
 		}
-	}
 
-	selection = doc.Find(`meta[property="twitter:image"]`)
-	if selection != nil {
-		if imgURL, found := selection.Attr("content"); found {
-			return imgURL
+		selection = doc.Find(`meta[property="twitter:image"]`)
+		if selection != nil {
+			if imgURL, found := selection.Attr("content"); found {
+				return imgURL
+			}
 		}
 	}
 
 	return ""
 }
 
-func getSummaryRss1(item rss1_0Item) string {
+func getSummaryRss1(item rss1_0Item, doc *goquery.Document) string {
 	var fbDesc, twDesc, socDesc, rssDesc string
-	doc, err := goquery.NewDocument(item.Link)
-	if err != nil {
-		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
-		return item.Description
-	}
-	selection := doc.Find(`meta[property="og:description"]`)
-	if selection != nil {
-		if desc, found := selection.Attr("content"); found {
-			fbDesc = desc
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:description"]`)
+		if selection != nil {
+			if desc, found := selection.Attr("content"); found {
+				fbDesc = desc
+			}
 		}
-	}
 
-	selection = doc.Find(`meta[property="twitter:description"]`)
-	if selection != nil {
-		if desc, found := selection.Attr("content"); found {
-			twDesc = desc
+		selection = doc.Find(`meta[property="twitter:description"]`)
+		if selection != nil {
+			if desc, found := selection.Attr("content"); found {
+				twDesc = desc
+			}
 		}
 	}
 
@@ -93,24 +95,21 @@ func getSummaryRss1(item rss1_0Item) string {
 	return desc
 }
 
-func getTitleRss1(item rss1_0Item) string {
+func getTitleRss1(item rss1_0Item, doc *goquery.Document) string {
 	var fbTitle, twTitle, socTitle, rssTitle string
-	doc, err := goquery.NewDocument(item.Link)
-	if err != nil {
-		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
-		return item.Title
-	}
-	selection := doc.Find(`meta[property="og:title"]`)
-	if selection != nil {
-		if t, found := selection.Attr("content"); found {
-			fbTitle = t
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:title"]`)
+		if selection != nil {
+			if t, found := selection.Attr("content"); found {
+				fbTitle = t
+			}
 		}
-	}
 
-	selection = doc.Find(`meta[property="twitter:title"]`)
-	if selection != nil {
-		if t, found := selection.Attr("content"); found {
-			twTitle = t
+		selection = doc.Find(`meta[property="twitter:title"]`)
+		if selection != nil {
+			if t, found := selection.Attr("content"); found {
+				twTitle = t
+			}
 		}
 	}
 
@@ -132,53 +131,47 @@ func getTitleRss1(item rss1_0Item) string {
 	return title
 }
 
-func getImageRss2(item rss2_0Item) string {
+func getImageRss2(item rss2_0Item, doc *goquery.Document) string {
 	for _, enc := range item.Enclosures {
 		if strings.Contains(enc.Type, "image") {
 			return enc.Url
 		}
 	}
-	doc, err := goquery.NewDocument(item.Link)
-	if err != nil {
-		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
-		return ""
-	}
 
-	selection := doc.Find(`meta[property="og:image"]`)
-	if selection != nil {
-		if imgURL, found := selection.Attr("content"); found {
-			return imgURL
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:image"]`)
+		if selection != nil {
+			if imgURL, found := selection.Attr("content"); found {
+				return imgURL
+			}
 		}
-	}
 
-	selection = doc.Find(`meta[property="twitter:image"]`)
-	if selection != nil {
-		if imgURL, found := selection.Attr("content"); found {
-			return imgURL
+		selection = doc.Find(`meta[property="twitter:image"]`)
+		if selection != nil {
+			if imgURL, found := selection.Attr("content"); found {
+				return imgURL
+			}
 		}
 	}
 
 	return ""
 }
 
-func getSummaryRss2(item rss2_0Item) string {
+func getSummaryRss2(item rss2_0Item, doc *goquery.Document) string {
 	var fbDesc, twDesc, socDesc, rssDesc string
-	doc, err := goquery.NewDocument(item.Link)
-	if err != nil {
-		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
-		return item.Description
-	}
-	selection := doc.Find(`meta[property="og:description"]`)
-	if selection != nil {
-		if desc, found := selection.Attr("content"); found {
-			fbDesc = desc
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:description"]`)
+		if selection != nil {
+			if desc, found := selection.Attr("content"); found {
+				fbDesc = desc
+			}
 		}
-	}
 
-	selection = doc.Find(`meta[property="twitter:description"]`)
-	if selection != nil {
-		if desc, found := selection.Attr("content"); found {
-			twDesc = desc
+		selection = doc.Find(`meta[property="twitter:description"]`)
+		if selection != nil {
+			if desc, found := selection.Attr("content"); found {
+				twDesc = desc
+			}
 		}
 	}
 
@@ -211,24 +204,21 @@ func getSummaryRss2(item rss2_0Item) string {
 	return desc
 }
 
-func getTitleRss2(item rss2_0Item) string {
+func getTitleRss2(item rss2_0Item, doc *goquery.Document) string {
 	var fbTitle, twTitle, socTitle, rssTitle string
-	doc, err := goquery.NewDocument(item.Link)
-	if err != nil {
-		log.Warnf("can not parse (url %v, error: %v)", item.Link, err.Error())
-		return item.Title
-	}
-	selection := doc.Find(`meta[property="og:title"]`)
-	if selection != nil {
-		if t, found := selection.Attr("content"); found {
-			fbTitle = t
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:title"]`)
+		if selection != nil {
+			if t, found := selection.Attr("content"); found {
+				fbTitle = t
+			}
 		}
-	}
 
-	selection = doc.Find(`meta[property="twitter:title"]`)
-	if selection != nil {
-		if t, found := selection.Attr("content"); found {
-			twTitle = t
+		selection = doc.Find(`meta[property="twitter:title"]`)
+		if selection != nil {
+			if t, found := selection.Attr("content"); found {
+				twTitle = t
+			}
 		}
 	}
 
