@@ -8,6 +8,7 @@ import (
 )
 
 func parseAtom(data []byte, read *db) (*Feed, error) {
+	fmt.Println("Parsing ATOM")
 	warnings := false
 	feed := atomFeed{}
 	p := xml.NewDecoder(bytes.NewReader(data))
