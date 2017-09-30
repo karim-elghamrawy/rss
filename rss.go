@@ -173,6 +173,7 @@ type Item struct {
 	Summary    string       `json:"summary"`
 	Content    string       `json:"content"`
 	Link       string       `json:"link"`
+	AtomLink   string       `json:"atom:link"`
 	Date       time.Time    `json:"date"`
 	ID         string       `json:"id"`
 	Enclosures []*Enclosure `json:"enclosures"`

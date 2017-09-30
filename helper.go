@@ -239,3 +239,107 @@ func getTitleRss2(item rss2_0Item, doc *goquery.Document) string {
 	}
 	return title
 }
+
+// ATOOOOOM
+func getImageAtom(item atomItem, doc *goquery.Document) string {
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:image"]`)
+		if selection != nil {
+			if imgURL, found := selection.Attr("content"); found {
+				return imgURL
+			}
+		}
+
+		selection = doc.Find(`meta[property="twitter:image"]`)
+		if selection != nil {
+			if imgURL, found := selection.Attr("content"); found {
+				return imgURL
+			}
+		}
+	}
+
+	return ""
+}
+
+func getSummaryAtom(item atomItem, doc *goquery.Document) string {
+	var fbDesc, twDesc, socDesc, rssDesc string
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:description"]`)
+		if selection != nil {
+			if desc, found := selection.Attr("content"); found {
+				fbDesc = desc
+			}
+		}
+
+		selection = doc.Find(`meta[property="twitter:description"]`)
+		if selection != nil {
+			if desc, found := selection.Attr("content"); found {
+				twDesc = desc
+			}
+		}
+	}
+
+	if !strings.ContainsAny(item.Summary, "&lt;&gt;") {
+		rssDesc = item.Summary
+	}
+
+	if len(fbDesc) >= len(twDesc) {
+		socDesc = fbDesc
+	} else {
+		socDesc = twDesc
+	}
+
+	var desc string
+
+	if len(socDesc) >= len(rssDesc) {
+		desc = socDesc
+	} else {
+		desc = rssDesc
+	}
+
+	descSlice := strings.Split(desc, " ")
+
+	if len(descSlice) > MaxDescriptionWords {
+		desc = strings.Join(descSlice[:MaxDescriptionWords], " ")
+	}
+	if desc != "" {
+		desc = fmt.Sprintf("%s...", desc)
+	}
+	return desc
+}
+
+func getTitleAtom(item atomItem, doc *goquery.Document) string {
+	var fbTitle, twTitle, socTitle, rssTitle string
+	if doc != nil {
+		selection := doc.Find(`meta[property="og:title"]`)
+		if selection != nil {
+			if t, found := selection.Attr("content"); found {
+				fbTitle = t
+			}
+		}
+
+		selection = doc.Find(`meta[property="twitter:title"]`)
+		if selection != nil {
+			if t, found := selection.Attr("content"); found {
+				twTitle = t
+			}
+		}
+	}
+
+	rssTitle = item.Title
+
+	if len(fbTitle) >= len(twTitle) {
+		socTitle = fbTitle
+	} else {
+		socTitle = twTitle
+	}
+
+	var title string
+
+	if len(socTitle) >= len(rssTitle) {
+		title = socTitle
+	} else {
+		title = rssTitle
+	}
+	return title
+}
