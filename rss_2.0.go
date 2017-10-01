@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
+	"net/url"
 	"sort"
 	"strings"
 	"time"
@@ -70,9 +71,10 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 
 	// Process items.
 	for _, item := range channel.Items {
+		// the case when item Link is null
 		if strings.Trim(item.Link, " ") == "" {
-			fmt.Println("Empty Item Link")
-			item.Link = item.ID
+			// fmt.Println("Empty Item Link")
+			item.Link, _ = url.PathUnescape(item.ID)
 		}
 		if item.ID == "" {
 			if item.Link == "" {
