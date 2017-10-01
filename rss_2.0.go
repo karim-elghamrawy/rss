@@ -13,6 +13,7 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 	warnings := false
 	feed := rss2_0Feed{}
 	p := xml.NewDecoder(bytes.NewReader(data))
+	p.DefaultSpace = "RssDefault"
 	p.CharsetReader = charsetReader
 	err := p.Decode(&feed)
 	if err != nil {
@@ -73,11 +74,9 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 		fmt.Printf("%+v", item)
 		if strings.Trim(item.Link, " ") == "" {
 			fmt.Println("Empty Item Link")
-			fmt.Printf("AtomLink %+v", item.AtomLink)
 			//item.Link = item.AtomLink[0].Href
 		} else {
 			fmt.Printf("ItemLink %s\n", item.Link)
-			fmt.Printf("AtomLink %+v\n", item.AtomLink)
 		}
 		if item.ID == "" {
 			if item.Link == "" {
@@ -181,8 +180,7 @@ type rss2_0Item struct {
 	Title       string            `xml:"title"`
 	Description string            `xml:"description"`
 	Content     string            `xml:"encoded"`
-	Link        string            `xml:"link"`
-	AtomLink    []atomLink        `xml:"atom:link"`
+	Link        string            `xml:"RssDefault link"`
 	PubDate     string            `xml:"pubDate"`
 	Date        string            `xml:"date"`
 	ID          string            `xml:"guid"`
