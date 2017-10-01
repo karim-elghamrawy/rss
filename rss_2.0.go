@@ -70,12 +70,12 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 
 	// Process items.
 	for _, item := range channel.Items {
-		if item.Link == "" && item.AtomLink != "" {
+		if strings.Trim(item.Link, " ") == "" && item.AtomLink != "" {
 			fmt.Println("Empty Item Link")
 			fmt.Printf("AtomLink %s", item.AtomLink)
 			item.Link = item.AtomLink
 		} else {
-			fmt.Printf("ItemLink %s", item.Link)
+			fmt.Printf("ItemLink %s\n", item.Link)
 		}
 		if item.ID == "" {
 			if item.Link == "" {
