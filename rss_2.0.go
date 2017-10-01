@@ -76,6 +76,7 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 			item.Link = item.AtomLink
 		} else {
 			fmt.Printf("ItemLink %s\n", item.Link)
+			fmt.Printf("AtomLink %s\n", item.AtomLink)
 		}
 		if item.ID == "" {
 			if item.Link == "" {
