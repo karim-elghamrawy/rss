@@ -70,6 +70,7 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 
 	// Process items.
 	for _, item := range channel.Items {
+		fmt.Printf("%+v", item)
 		if strings.Trim(item.Link, " ") == "" {
 			fmt.Println("Empty Item Link")
 			fmt.Printf("AtomLink %+v", item.AtomLink)
@@ -180,7 +181,7 @@ type rss2_0Item struct {
 	Title       string            `xml:"title"`
 	Description string            `xml:"description"`
 	Content     string            `xml:"encoded"`
-	Link        []atomLink        `xml:"link"`
+	Link        string            `xml:"link"`
 	AtomLink    []atomLink        `xml:"atom:link"`
 	PubDate     string            `xml:"pubDate"`
 	Date        string            `xml:"date"`
