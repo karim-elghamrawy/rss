@@ -13,7 +13,6 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 	warnings := false
 	feed := rss2_0Feed{}
 	p := xml.NewDecoder(bytes.NewReader(data))
-	p.DefaultSpace = "RssDefault"
 	p.CharsetReader = charsetReader
 	err := p.Decode(&feed)
 	if err != nil {
@@ -177,7 +176,7 @@ type rss2_0Item struct {
 	Title       string            `xml:"title"`
 	Description string            `xml:"description"`
 	Content     string            `xml:"encoded"`
-	Link        string            `xml:"RssDefault link"`
+	Link        string            `xml:"link"`
 	PubDate     string            `xml:"pubDate"`
 	Date        string            `xml:"date"`
 	ID          string            `xml:"guid"`
