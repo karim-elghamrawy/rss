@@ -73,7 +73,7 @@ func parseRSS2(data []byte, read *db) (*Feed, error) {
 		if strings.Trim(item.Link, " ") == "" {
 			fmt.Println("Empty Item Link")
 			fmt.Printf("AtomLink %+v", item.AtomLink)
-			item.Link = item.AtomLink[0].Href
+			//item.Link = item.AtomLink[0].Href
 		} else {
 			fmt.Printf("ItemLink %s\n", item.Link)
 			fmt.Printf("AtomLink %+v\n", item.AtomLink)
@@ -180,7 +180,7 @@ type rss2_0Item struct {
 	Title       string            `xml:"title"`
 	Description string            `xml:"description"`
 	Content     string            `xml:"encoded"`
-	Link        string            `xml:"link"`
+	Link        []atomLink        `xml:"link"`
 	AtomLink    []atomLink        `xml:"atom:link"`
 	PubDate     string            `xml:"pubDate"`
 	Date        string            `xml:"date"`
